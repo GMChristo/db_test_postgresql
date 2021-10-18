@@ -1,41 +1,22 @@
 import 'dart:io';
-import 'package:fluent_query_builder/fluent_query_builder.dart';
+import 'package:visitacao_server/db_connect.dart';
 
 void main() async {
   print('start execution');
-  //PostgreSQL connection information
-  final pgsqlComInfo = DBConnectionInfo(
-    enablePsqlAutoSetSearchPath: true,
-    reconnectIfConnectionIsNotOpen: true,
-    host: 'localhost', //192.168.133.13
-    database: 'teste',
-    driver: ConnectionDriver.pgsql,
-    port: 5432,
-    username: 'postgres',
-    password: 's1sadm1n',
-    charset: 'utf8',
-    schemes: ['public'],
-    setNumberOfProcessorsFromPlatform: false,
-    numberOfProcessors: 8,
-  );
-
-  var db;
+  var connect;
   try {
-    print('try connect');
-    db = await DbLayer().connect(pgsqlComInfo);
-    print('connected: ${db.toString()}');
-  } catch (e, s) {
-    print('catch connect $e $s');
+    connect = await getDb;
+    var r = await connect.select().from('teste_pessoa').exec();
+    print(r);
+  } catch (e) {
+    print('catch getDb main: $e');
   }
 
-  print('antes var r - connected: ${db.toString()}');
-  var r = await db.select().from('teste_pessoa').exec();
-  print(r);
-
-  var ins = await db.insert().into('teste_pessoa').set('nome', 'test insert').set('idade', 00).exec();
-  print(ins);
+  // var ins = await db.insert().into('teste_pessoa').set('nome', 'test2 insert').set('idade', 31).exec();
+  // print(ins);
 
   exit(0);
+  
 }
 
 
