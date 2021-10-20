@@ -1,22 +1,32 @@
 import 'dart:io';
 import 'package:visitacao_server/db_connect.dart';
+import 'package:visitacao_server/controllers/pessoa_controller.dart';
 
 void main() async {
-  print('start execution');
-  var connect;
-  try {
-    connect = await getDb;
-    var r = await connect.select().from('teste_pessoa').exec();
-    print(r);
-  } catch (e) {
-    print('catch getDb main: $e');
-  }
+  const nome = 'test funcInsert2';
+  const idade = 26;
+
+  final connect = await getDb;
+
+  PessoaController pessoaController = PessoaController();
+  await pessoaController.listAllPessoas(connect);
 
   // var ins = await db.insert().into('teste_pessoa').set('nome', 'test2 insert').set('idade', 31).exec();
   // print(ins);
 
-  exit(0);
+  // print('antes insertPessoa()');
+  // await pessoaController.insertPessoa(connect, nome, idade);
+
+  // print('antes pesquisaPessoa()');
+  // await pessoaController.pesquisaPessoa(connect);
+
+  print('antes deletePessoaByNome');
+  await pessoaController.deletePessoaByNome(connect, nome);
   
+  print('antes listAllPessoas2');
+  await pessoaController.listAllPessoas(connect);
+
+  exit(0);
 }
 
 
